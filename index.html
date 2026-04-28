@@ -152,8 +152,19 @@
     <!-- Panel Drive -->
     <div id="panel-drive">
       <div class="video-zone" id="drop-zone">
-        <input type="file" id="file-input" accept="video/*" onchange="onFileSelected(this)">
-        <span class="video-zone-icon">🎬</span>
+        <div style="display:flex;gap:8px;margin-top:12px">
+  <label style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;background:#0d2e22;border:1px solid var(--accent2);border-radius:8px;cursor:pointer;font-size:12px;font-weight:600;color:var(--accent);font-family:var(--mono)">
+    📷 Cámara
+    <input type="file" accept="video/*" capture="environment" onchange="onFileSelected(this)" style="display:none">
+  </label>
+  <label style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;cursor:pointer;font-size:12px;font-weight:600;color:var(--muted);font-family:var(--mono)">
+    🗂️ Archivos
+    <input type="file" accept="video/*" onchange="onFileSelected(this)" style="display:none">
+  </label>
+</div>
+<input type="file" id="file-input" accept="video/*" onchange="onFileSelected(this)">
+<input type="file" id="file-input-cam" accept="video/*" capture="environment" onchange="onFileSelected(this)" style="display:none">        <span class="video-zone-icon">🎬</span>
+        
         <p id="file-label">Toca para seleccionar video<br>o arrastra aquí<br><small style="color:var(--muted);font-family:var(--mono);font-size:11px">máx recomendado: 50 MB</small></p>
       </div>
       <div class="progress-label" id="progress-label">Preparando...</div>
@@ -183,8 +194,7 @@
   </div>
 </div>
 
-<!-- Debug panel -->
-<div id="debug-panel"></div>
+
 
 <script>
 // ╔══════════════════════════════════════════════════════════════════╗
@@ -229,18 +239,6 @@ let STATE = { storeId:'', token:'', storeName:'', plan:'', fileBlob:null, fileNa
     dbg('Auto-login desde editor: ' + store, 'ok');
   });
 })();
-
-// ── Debug panel ───────────────────────────────────────────────────
-function dbg(msg, type) {
-  const panel = document.getElementById('debug-panel');
-  const color = type === 'err' ? '#ff5c5c' : type === 'ok' ? '#00e5a0' : '#6b6b7a';
-  const line  = document.createElement('div');
-  line.style.color = color;
-  line.textContent = '[' + new Date().toLocaleTimeString() + '] ' + msg;
-  panel.appendChild(line);
-  panel.scrollTop = panel.scrollHeight;
-}
-
 // ── UI helpers ────────────────────────────────────────────────────
 function showMsg(id, text, type) { const el = document.getElementById(id); el.textContent = text; el.className = 'msg show ' + (type||'ok'); }
 function hideMsg(id) { document.getElementById(id).className = 'msg'; }
